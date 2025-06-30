@@ -26,7 +26,7 @@ This project demonstrates how to:
 
 ## 🔄 How the Pipeline Works
 
-![elt-design]()
+![elt-design](https://github.com/Rico-febrian/flight-bookings-elt-pipeline-with-dbt-airflow/blob/main/picts/elt-airflow-dbt.png)
 
 - **Extract Task**: Pulls raw data from the source database and saves it as CSV files in MinIO.
 
@@ -159,21 +159,19 @@ Log in with the default credentials:
 
 You need to create **four** essential connections within the Airflow UI to allow your DAGs to communicate with the **databases**, **MinIO**, and **Slack**. Navigate to **Admin** > **Connections** in the Airflow UI to set these up:
 
-<img src="" alt="connection-list" width="800"/>
-
 - `flight-db-src` and `flight-db-dwh`
     
     - **Type**: PostgreSQL
     - **Description**: Connection to source and warehouse database
 
-      <img src="" alt="db-conn" width="600"/>
+      <img src="https://github.com/Rico-febrian/flight-bookings-elt-pipeline-with-dbt-airflow/blob/main/picts/db-conn.png" alt="db-conn" width="600"/>
 
 - `minio`
     
     - **Type**: Amazon Web Service
     - **Description**: Connection to MinIO (used as object storage/data lake)
 
-      <img src="" alt="minio-conn" width="600"/>
+      <img src="https://github.com/Rico-febrian/flight-bookings-elt-pipeline-with-dbt-airflow/blob/main/picts/minio-result.png" alt="minio-conn" width="600"/>
 
 - `slack_notifier`
 
@@ -215,9 +213,9 @@ You need to create **four** essential connections within the Airflow UI to allow
 
 You need to create **three** Airflow Variables via the **Admin** > **Variables** section in the Airflow UI. These variables provide dynamic configuration for your DAGs.
 
-<img src="" alt="variables-list" width="700"/>
-
 - `flight_staging_incremental_mode`
+
+  <img src="https://github.com/Rico-febrian/flight-bookings-elt-pipeline-with-dbt-airflow/blob/main/picts/incremental-vars.png" alt="variables-list" width="700"/>
 
   - **Key**: `flight_staging_incremental_mode`
   - **Value**: `True` or `False`. Default value is `False`.
@@ -228,6 +226,8 @@ You need to create **three** Airflow Variables via the **Admin** > **Variables**
     - If set to `False`, the pipeline will run a **full load**, extracting and loading all data every time, regardless of changes.
 
 - `list_flight_table`
+
+  <img src="https://github.com/Rico-febrian/flight-bookings-elt-pipeline-with-dbt-airflow/blob/main/picts/list-table-vars.png" alt="variables-list" width="700"/>
     
     - **Key**: `list_flight_table`
     - **Value**:
@@ -239,6 +239,8 @@ You need to create **three** Airflow Variables via the **Admin** > **Variables**
     - **Description**: This variable will be used to create dynamic tasks during the data extraction process.
 
 - `pkey_flight_table`
+
+  <img src="https://github.com/Rico-febrian/flight-bookings-elt-pipeline-with-dbt-airflow/blob/main/picts/pkey-vars.png" alt="variables-list" width="700"/>
 
   - **Key**: `pkey_flight_table`
   - **Value**:
@@ -273,7 +275,10 @@ You need to create **three** Airflow Variables via the **Admin** > **Variables**
 
 - Click the Play ▶️ button on flights_staging_pipeline to trigger the pipeline.
 
-Note: You don’t need to manually run flights_warehouse_pipeline. It will be triggered automatically after the staging pipeline completes.
+  <img src="https://github.com/Rico-febrian/flight-bookings-elt-pipeline-with-dbt-airflow/blob/main/picts/dags.png" alt="variables-list" width="700"/>
+
+> [!Note]
+> You don’t need to manually run flights_warehouse_pipeline. It will be triggered automatically after the staging pipeline completes.
 
 ---
 
@@ -285,13 +290,13 @@ Note: You don’t need to manually run flights_warehouse_pipeline. It will be tr
   - Load tasks run sequentially (after extraction)
   - Once loading is done, it **triggers** `flights_warehouse_pipeline`
 
-    <img src="" alt="dag-result" width="800"/>
+    <img src="https://github.com/Rico-febrian/flight-bookings-elt-pipeline-with-dbt-airflow/blob/main/picts/stg-full-graph.png" alt="dag-result" width="800"/>
 
 - In `flights_warehouse_pipeline`:
 
   - DBT runs transformation models to create clean final tables in the warehouse
 
-    <img src="" alt="dag-result" width="800"/>
+    <img src="https://github.com/Rico-febrian/flight-bookings-elt-pipeline-with-dbt-airflow/blob/main/picts/dwh-graph.png" alt="dag-result" width="800"/>
 
 ---
 
@@ -299,34 +304,13 @@ Note: You don’t need to manually run flights_warehouse_pipeline. It will be tr
 
 Since incremental mode and catchup are disabled (set to `False`), the pipeline will runs the **full load** process. So, you can just verify the result by open the database.
 
-### DAG Result
-
-- flights_staging_pipeline
-<img src="" alt="dag-result" width="800"/>
-
-
-- flights_warehouse_pipeline
-<img src="" alt="dag-result" width="800"/>
-
-### Extract Task (running in parallel)
-
-<img src="" alt="extract-task" width="200"/>
-
-### Load Task (running sequentially)
-
-<img src="" alt="load-task" width="800"/>
-
-### Transform Task using DBT
-
-<img src="" alt="transform-task" width="800"/>
-
 ### Extracted Data in MinIO Bucket
 
 - Log in to the MinIO console (eg. localhost:9000) using the username and password defined in your `.env` file.
 - Navigate to the selected bucket.
 - You should see the extracted data files in CSV format.
 
-  <img src="https://github.com/Rico-febrian/flight-bookings-elt-pipeline-with-airflow/blob/main/pict/minio-result.png" alt="minio-result" width="600"/>
+  <img src="https://github.com/Rico-febrian/flight-bookings-elt-pipeline-with-dbt-airflow/blob/main/picts/minio-result.png" alt="minio-result" width="600"/>
 
 ### Staging and Transformed data in Data Warehouse
 
