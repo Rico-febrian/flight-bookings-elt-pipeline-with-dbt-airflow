@@ -171,7 +171,7 @@ You need to create **four** essential connections within the Airflow UI to allow
     - **Type**: Amazon Web Service
     - **Description**: Connection to MinIO (used as object storage/data lake)
 
-      <img src="https://github.com/Rico-febrian/flight-bookings-elt-pipeline-with-dbt-airflow/blob/main/picts/minio-result.png" alt="minio-conn" width="600"/>
+      <img src="https://github.com/Rico-febrian/flight-bookings-elt-pipeline-with-dbt-airflow/blob/main/picts/minio-conn.png" alt="minio-conn" width="600"/>
 
 - `slack_notifier`
 
